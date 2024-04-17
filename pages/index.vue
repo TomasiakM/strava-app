@@ -1,3 +1,3 @@
 <template>
-  <NuxtLayout />
+  <div>Index</div>
 </template>
