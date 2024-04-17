@@ -17,6 +17,7 @@ export default {
         primary: "#FF7431",
         secondary: "#31BCFF",
         background: "#F2F0EB",
+        danger: "#D21D26",
       },
     },
   },

@@ -6,4 +6,10 @@ export default defineNuxtConfig({
     cssPath: "@/assets/css/main.css",
     configPath: "tailwind.config.ts",
   },
+  runtimeConfig: {
+    public: {
+      baseUrl: "http://localhost:3000",
+      stravaClientId: 0,
+    },
+  },
 });
