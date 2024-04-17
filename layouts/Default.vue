@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen grid grid-cols-12">
+  <div class="min-h-screen grid grid-cols-12">
     <aside
       class="bg-primary text-white col-span-2 flex flex-col justify-between"
     >
@@ -17,9 +17,13 @@
           <div>Aktywności</div>
         </AsideLink>
       </div>
-      <div class="p-1 text-center">Power by STRAVA</div>
+      <div class="p-1 flex justify-center bg-white">
+        <NuxtLink to="https://strava.com">
+          <SvgPowerByStrava />
+        </NuxtLink>
+      </div>
     </aside>
-    <main class="bg-background col-span-10">
+    <main class="col-span-10">
       <NuxtPage />
     </main>
   </div>
