@@ -39,5 +39,21 @@ export default defineStore("athlete", {
         return false;
       }
     },
+    async init(headers: Readonly<Record<string, string>>) {
+      const authService = useAuthService();
+      const athletesService = useAthletesService();
+      try {
+        const response = await authService.refresh(headers);
+        this.accessToken = response.accessToken;
+
+        const athlete = await athletesService.getAuthorized();
+        this.athlete = athlete;
+
+        return true;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    },
   },
 });

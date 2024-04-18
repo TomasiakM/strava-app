@@ -1,4 +1,5 @@
 import type { ILoginResponse } from "@/types/services/auth/ILoginResponse";
+import type { IRefreshResponse } from "@/types/services/auth/IRefreshResponse";
 
 export default () => {
   const {
@@ -14,11 +15,12 @@ export default () => {
     });
   };
 
-  const refresh = () => {
+  const refresh = (headers?: Readonly<Record<string, string>>) => {
     return $fetch<IRefreshResponse>("api/auth/refresh", {
       method: "POST",
       baseURL: baseApiUrl,
       credentials: "include",
+      headers,
     });
   };
 
