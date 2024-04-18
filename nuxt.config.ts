@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       baseUrl: "http://localhost:3000",
+      baseApiUrl: "http://localhost:5000",
       stravaClientId: 0,
     },
   },
