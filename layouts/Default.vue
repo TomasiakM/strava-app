@@ -1,22 +1,22 @@
 <template>
-  <div class="min-h-screen grid grid-cols-12">
-    <aside class="col-span-0 md:col-span-3 xl:col-span-2">
+  <div>
+    <aside
+      class="fixed top-0 right-full md:right-auto md:left-0 z-[99999] h-screen w-[250px] md:w-[25%] xl:w-[16.6666%]"
+    >
       <div
-        class="fixed z-50 md:sticky bg-primary text-white top-0 min-h-screen w-[250px] md:w-full flex flex-col justify-between"
+        class="md:sticky bg-primary text-white h-full flex flex-col justify-between duration-300"
         :class="
-          isOpen
-            ? 'duration-300'
-            : '-translate-x-full md:-translate-x-0 duration-300'
+          isOpen ? ' translate-x-full' : ' translate-x-0 md:translate-x-0'
         "
       >
         <div class="absolute md:hidden left-full top-1/2 -translate-y-1/2">
           <button
-            class="bg-secondary w-6 h-10 flex justify-center items-center rounded-r-full"
+            class="z-[99999] bg-secondary w-6 h-10 flex justify-center items-center rounded-r-full"
             @click="isOpen = !isOpen"
           >
             <SvgChevron
               class="w-5 h-5 mr-1 duration-100"
-              :class="isOpen ? ' rotate-180' : 'rotate-0'"
+              :class="isOpen ? 'rotate-180' : 'rotate-0'"
             />
           </button>
         </div>
@@ -53,9 +53,12 @@
         </div>
       </div>
     </aside>
-    <main class="col-span-12 md:col-span-9 xl:col-span-10">
-      <NuxtPage />
-    </main>
+    <div class="z-40 grid grid-cols-12 min-h-screen">
+      <div class="hidden md:block md:col-span-3 xl:col-span-2"></div>
+      <main class="col-span-12 md:col-span-9 xl:col-span-10">
+        <NuxtPage />
+      </main>
+    </div>
   </div>
 </template>
 
