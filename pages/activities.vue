@@ -1,27 +1,22 @@
 <template>
-  <div>
-    <div
-      v-if="data"
-      class="p-2 text-2xl font-semibold text-primary drop-shadow-sm"
-    >
-      Posiadasz {{ data.length }} aktywności
-    </div>
-    <div class="p-2 grid grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-4">
-      <ActivityItem
-        v-for="activity in data"
-        :key="activity.stravaId"
-        :activity="activity"
-      />
-    </div>
+  <div class="p-2">
+    <DataContainer :is-loading="isLoading" :is-error="isError">
+      <div class="mb-3 text-2xl font-semibold text-primary drop-shadow-sm">
+        Posiadasz {{ activities.length }} aktywności
+      </div>
+      <div class="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-4">
+        <ActivityItem
+          v-for="activity in activities"
+          :key="activity.stravaId"
+          :activity="activity"
+        />
+      </div>
+    </DataContainer>
   </div>
 </template>
 
 <script lang="ts" setup>
-import useActivitiesService from "@/requests/activities";
+const { isLoading, isError, activities } = storeToRefs(useActivitiesStore());
 
-const athleteService = useActivitiesService();
-
-const { data, execute } = useAsyncData(() => athleteService.getAll(), {
-  server: false,
-});
+const { fetchAllActivities } = useActivitiesStore();
 </script>
