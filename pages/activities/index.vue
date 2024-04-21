@@ -1,9 +1,10 @@
 <template>
   <div class="p-2">
-    <DataContainer :is-loading="isLoading" :is-error="isError">
-      <div class="mb-3 text-2xl font-semibold text-primary drop-shadow-sm">
-        Posiadasz {{ activities.length }} aktywności
-      </div>
+    <DataContainer
+      :is-loading="isLoading"
+      :is-error="isError"
+      @refresh="fetchAllActivities()"
+    >
       <div class="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-4">
         <ActivityItem
           v-for="activity in activities"

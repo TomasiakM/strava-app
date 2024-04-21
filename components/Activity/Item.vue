@@ -1,32 +1,7 @@
 <template>
   <div class="bg-white rounded overflow-hidden shadow">
     <div class="aspect-video">
-      <LMap
-        ref="map"
-        :zoom="2"
-        :center="[0, 0]"
-        :options="{
-          attributionControl: false,
-          zoomControl: false,
-          doubleClickZoom: false,
-          dragging: false,
-          scrollWheelZoom: false,
-        }"
-        @ready="onReady"
-      >
-        <LTileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          layer-type="base"
-          name="OpenStreetMap"
-        />
-        <LPolyline
-          ref="polyline"
-          :lat-lngs="latLngs"
-          :color="primaryPolyline"
-          :weight="3"
-          :interactive="false"
-        />
-      </LMap>
+      <LeafletStaticMap :polyline="activity.polyline" />
     </div>
     <div class="p-2 flex justify-between">
       <div>
@@ -54,30 +29,13 @@
 </template>
 
 <script lang="ts" setup>
-import { decode } from "@googlemaps/polyline-codec";
 import type { IActivity } from "@/types/services/activities";
 
 interface IProps {
   activity: IActivity;
 }
 
-const props = defineProps<IProps>();
-
-const {
-  public: { primaryPolyline },
-} = useRuntimeConfig();
-
-const map = ref();
-const polyline = ref();
-
-const latLngs = computed(() => {
-  return decode(props.activity.polyline);
-});
-
-const onReady = () => {
-  const bounds = (polyline.value?.leafletObject as L.Polyline).getBounds();
-  (map.value?.leafletObject as L.Map).fitBounds(bounds);
-};
+defineProps<IProps>();
 
 const getDistance = (distance: number) => {
   return (distance / 1000).toFixed(2);
