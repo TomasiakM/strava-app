@@ -23,6 +23,8 @@
               </div>
             </div>
           </div>
+
+          <ActivityStatisticList :activity="activity" />
         </div>
       </div>
     </DataContainer>
