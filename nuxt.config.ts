@@ -6,6 +6,9 @@ export default defineNuxtConfig({
     cssPath: "@/assets/css/main.css",
     configPath: "tailwind.config.ts",
   },
+  imports: {
+    dirs: ["composables/**"],
+  },
   runtimeConfig: {
     public: {
       primaryPolyline: "#FF7431",

@@ -19,7 +19,7 @@
                 {{ activity.name }}
               </h3>
               <div class="text-sm text-gray-600">
-                {{ new Date(activity.startDateLocal).toLocaleString() }}
+                {{ useDate(activity.startDateLocal).dateTime }}
               </div>
             </div>
           </div>

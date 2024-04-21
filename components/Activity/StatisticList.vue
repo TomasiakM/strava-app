@@ -5,7 +5,7 @@
         <SvgDistance />
       </template>
 
-      <div title="Dystans">{{ (activity.distance / 1000).toFixed(2) }} km</div>
+      <div title="Dystans">{{ useDistance(activity.distance) }} km</div>
     </ActivityStatisticItem>
 
     <ActivityStatisticItem>
@@ -13,9 +13,9 @@
         <SvgTime />
       </template>
 
-      <div title="Czas poruszania">{{ getTime(activity.movingTime) }}</div>
+      <div title="Czas poruszania">{{ useDuration(activity.movingTime) }}</div>
       <div title="Czas całkowity" class="text-xs text-gray-600 font-semibold">
-        {{ getTime(activity.elapsedTime) }}
+        {{ useDuration(activity.elapsedTime) }}
       </div>
     </ActivityStatisticItem>
 
@@ -25,13 +25,13 @@
       </template>
 
       <div title="Średnia prędkość">
-        {{ (activity.averageSpeed * 3.6).toFixed(2) }} km/h
+        {{ useSpeed(activity.averageSpeed) }} km/h
       </div>
       <div
         title="Maksymalna prędkość"
         class="text-xs text-gray-600 font-semibold"
       >
-        {{ (activity.maxSpeed * 3.6).toFixed(2) }} km/h
+        {{ useSpeed(activity.maxSpeed) }} km/h
       </div>
     </ActivityStatisticItem>
 
@@ -97,17 +97,4 @@ interface IProps {
 }
 
 defineProps<IProps>();
-
-const getTime = (time: number) => {
-  const hours = Math.floor(time / (60 * 60));
-  let rest = time % (60 * 60);
-
-  const min = Math.floor(rest / 60);
-  rest = rest % 60;
-
-  const sec = rest;
-  return `${hours < 10 ? `0${hours}` : hours}:${min < 10 ? `0${min}` : min}:${
-    sec < 10 ? `0${sec}` : sec
-  }`;
-};
 </script>

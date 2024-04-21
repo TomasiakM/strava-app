@@ -14,14 +14,16 @@
         <div class="flex items-center gap-2">
           <div>{{ activity.sportType }}</div>
           <div class="font-semibold">
-            {{ getDistance(activity.distance) }} km
+            {{ useDistance(activity.distance) }} km
           </div>
         </div>
       </div>
       <div class="hidden md:flex flex-col items-end">
-        <div class="font-semibold">{{ getTime(activity.movingTime) }}</div>
+        <div class="font-semibold">
+          {{ useDuration(activity.movingTime) }}
+        </div>
         <div class="font-semibold text-sm text-gray-600">
-          ({{ getTime(activity.elapsedTime) }})
+          ({{ useDuration(activity.elapsedTime) }})
         </div>
       </div>
     </div>
@@ -36,21 +38,4 @@ interface IProps {
 }
 
 defineProps<IProps>();
-
-const getDistance = (distance: number) => {
-  return (distance / 1000).toFixed(2);
-};
-
-const getTime = (time: number) => {
-  const hours = Math.floor(time / (60 * 60));
-  let rest = time % (60 * 60);
-
-  const min = Math.floor(rest / 60);
-  rest = rest % 60;
-
-  const sec = rest;
-  return `${hours < 10 ? `0${hours}` : hours}:${min < 10 ? `0${min}` : min}:${
-    sec < 10 ? `0${sec}` : sec
-  }`;
-};
 </script>

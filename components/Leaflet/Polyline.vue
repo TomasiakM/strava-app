@@ -14,12 +14,12 @@
         {{ activity.name }}
       </NuxtLink>
       <div>
-        {{ new Date(activity.startDateLocal).toLocaleDateString() }}
+        {{ useDate(activity.startDateLocal).dateTime }}
       </div>
-      <div>Dystans: {{ (activity.distance / 1000).toFixed(2) }} km</div>
+      <div>Dystans: {{ useDistance(activity.distance) }} km</div>
       <div>
         Średnia prędkość:
-        {{ (activity.averageSpeed * 3.6).toFixed(2) }} km/h
+        {{ useSpeed(activity.averageSpeed) }} km/h
       </div>
       <div>Przewyższenie: {{ activity.totalElevationGain }} m</div>
     </LPopup>
