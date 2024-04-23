@@ -37,6 +37,16 @@
 
     <ActivityStatisticItem>
       <template #icon>
+        <SvgPace />
+      </template>
+
+      <div title="Tępo">
+        {{ usePace(activity.distance, activity.movingTime) }}
+      </div>
+    </ActivityStatisticItem>
+
+    <ActivityStatisticItem>
+      <template #icon>
         <SvgElevation />
       </template>
 
