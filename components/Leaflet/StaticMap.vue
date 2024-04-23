@@ -1,7 +1,8 @@
 <template>
   <LMap
     ref="map"
-    :zoom="2"
+    :zoom="4"
+    :max-zoom="13"
     :center="[0, 0]"
     :options="{
       attributionControl: false,
@@ -17,6 +18,7 @@
       layer-type="base"
       name="OpenStreetMap"
     />
+
     <LPolyline
       ref="polyline"
       :lat-lngs="latLngs"
@@ -24,6 +26,8 @@
       :weight="3"
       :interactive="false"
     />
+
+    <LeafletPolylineGridLine v-for="line in tilesGrid" :lat-lngs="line" />
   </LMap>
 </template>
 
@@ -39,6 +43,9 @@ const props = defineProps<IProps>();
 const map = ref();
 const polyline = ref();
 
+const zoom = ref(4);
+const bounds = ref<L.LatLngBounds>();
+
 const {
   public: { primaryPolyline },
 } = useRuntimeConfig();
@@ -47,8 +54,13 @@ const latLngs = computed(() => {
   return decode(props.polyline);
 });
 
+const tilesGrid = useTileGrid(bounds, zoom);
+
 const onReady = () => {
-  const bounds = (polyline.value?.leafletObject as L.Polyline).getBounds();
-  (map.value?.leafletObject as L.Map).fitBounds(bounds);
+  const b = (polyline.value.leafletObject as L.Polyline).getBounds();
+  (map.value?.leafletObject as L.Map).fitBounds(b);
+
+  bounds.value = (map.value?.leafletObject as L.Map).getBounds();
+  zoom.value = (map.value?.leafletObject as L.Map).getZoom();
 };
 </script>
