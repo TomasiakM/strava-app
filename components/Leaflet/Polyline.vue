@@ -9,11 +9,11 @@
     <LPopup>
       <NuxtLink
         :to="`activities/${activity.stravaId}`"
-        class="inline-block !text-primary font-semibold mb-2"
+        class="inline-block !text-primary text-lg font-semibold"
       >
         {{ activity.name }}
       </NuxtLink>
-      <div>
+      <div class="text-xs text-gray-600 font-semibold mb-2">
         {{ useDate(activity.startDateLocal).dateTime }}
       </div>
       <div>Dystans: {{ useDistance(activity.distance) }} km</div>

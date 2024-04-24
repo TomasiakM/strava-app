@@ -6,7 +6,7 @@
       @refresh="fetchAllActivities()"
     >
       <div class="w-full" v-if="activity">
-        <div class="aspect-[16/4]">
+        <div class="aspect-[16/6]">
           <LeafletStaticMap :polyline="activity.polyline" />
         </div>
         <div class="p-2">
@@ -45,13 +45,13 @@ const activity = computed(() => {
 
   const id = Number(route.params.id);
   if (Number.isNaN(id)) {
-    router.replace("/404");
+    router.replace("/");
     return null;
   }
 
   const act = activities.value.find((e) => e.stravaId == id);
-  if (act === null) {
-    router.replace("/404");
+  if (!act) {
+    router.replace("/");
     return null;
   }
 

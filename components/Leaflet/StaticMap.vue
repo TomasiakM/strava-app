@@ -14,7 +14,7 @@
     @ready="onReady"
   >
     <LTileLayer
-      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png"
       layer-type="base"
       name="OpenStreetMap"
     />

@@ -3,27 +3,36 @@
     <div class="aspect-video">
       <LeafletStaticMap :polyline="activity.polyline" />
     </div>
-    <div class="p-2 flex justify-between">
-      <div>
-        <NuxtLink
-          :to="`/activities/${activity.stravaId}`"
-          class="lg:text-lg font-semibold text-secondary"
-        >
-          {{ activity.name }}
-        </NuxtLink>
-        <div class="flex items-center gap-2">
-          <div>{{ activity.sportType }}</div>
-          <div class="font-semibold">
-            {{ useDistance(activity.distance) }} km
+    <div class="p-2 flex justify-between items-center">
+      <div class="flex items-center gap-2">
+        <div class="hidden md:block">{{ activity.sportType }}</div>
+
+        <div>
+          <NuxtLink
+            :to="`/activities/${activity.stravaId}`"
+            class="lg:text-lg font-semibold text-secondary"
+          >
+            {{ activity.name }}
+          </NuxtLink>
+          <div class="font-semibold text-xs text-gray-600">
+            {{ useDate(activity.startDateLocal).date }}
           </div>
         </div>
       </div>
-      <div class="hidden md:flex flex-col items-end">
-        <div class="font-semibold">
-          {{ useDuration(activity.movingTime) }}
+      <div class="hidden md:flex items-center gap-2">
+        <div class="font-semibold" v-if="activity.distance">
+          {{ useDistance(activity.distance) }} km
         </div>
-        <div class="font-semibold text-sm text-gray-600">
-          ({{ useDuration(activity.elapsedTime) }})
+        <div class="flex flex-col items-end" v-else>
+          <div class="font-semibold">
+            {{ useDuration(activity.movingTime) }}
+          </div>
+          <div
+            v-if="activity.movingTime !== activity.elapsedTime"
+            class="font-semibold text-xs text-gray-600"
+          >
+            ({{ useDuration(activity.elapsedTime) }})
+          </div>
         </div>
       </div>
     </div>
