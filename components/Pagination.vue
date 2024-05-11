@@ -98,7 +98,7 @@ const pageButtons = computed(() => {
 });
 </script>
 
-<style lang="postcss">
+<style lang="postcss" scoped>
 button {
   @apply w-8 h-8 flex items-center justify-center text-secondary bg-white rounded-full;
 }
