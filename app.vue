@@ -5,10 +5,12 @@
 <script lang="ts" setup>
 const athleteStore = useAthleteStore();
 const activitiesStore = useActivitiesStore();
+const tilesStore = useTilesStore();
 
 const fetchAllNecessaryData = () => {
   if (athleteStore.isAuthenticated) {
     activitiesStore.fetchAllActivities();
+    tilesStore.fetchAllActivitiesTiles();
   }
 };
 
