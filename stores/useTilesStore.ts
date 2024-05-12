@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import useTileService from "@/requests/tiles";
-import type { ITileDetails } from "@/types/services/tiles";
+import type { ITile, ITileDetails } from "@/types/services/tiles";
 
 export default defineStore("tiles", {
   state: () => ({
@@ -26,9 +26,50 @@ export default defineStore("tiles", {
     },
   },
   getters: {
-    getActivityTiles(state): (activityId: number) => ITileDetails | undefined {
+    getActivityNewSquareTiles(state): (activityId: number) => ITile[] {
       return (activityId: number) =>
-        state.activitiesTiles.find((e) => e.stravaActivityId == activityId);
+        state.activitiesTiles.find((e) => e.stravaActivityId == activityId)
+          ?.newSquareTiles || [];
+    },
+
+    getNewTilesWithoutNewClusterAndSquareTiles(
+      state
+    ): (activityId: number) => ITile[] {
+      return (activityId: number): ITile[] => {
+        const activityTiles = state.activitiesTiles.find(
+          (e) => e.stravaActivityId == activityId
+        );
+
+        if (!activityTiles) return [];
+
+        return activityTiles.newTiles.filter(
+          (tile) =>
+            !(
+              activityTiles.newClusterTiles.some(
+                (t) => t.x === tile.x && t.y === tile.y && t.z === tile.z
+              ) ||
+              activityTiles.newSquareTiles.some(
+                (t) => t.x === tile.x && t.y === tile.y && t.z === tile.z
+              )
+            )
+        );
+      };
+    },
+    getNewTilesWithoutNewSquareTiles(state): (activityId: number) => ITile[] {
+      return (activityId: number): ITile[] => {
+        const activityTiles = state.activitiesTiles.find(
+          (e) => e.stravaActivityId == activityId
+        );
+
+        if (!activityTiles) return [];
+
+        return activityTiles.newClusterTiles.filter(
+          (tile) =>
+            !activityTiles.newSquareTiles.some(
+              (t) => t.x === tile.x && t.y === tile.y && t.z === tile.z
+            )
+        );
+      };
     },
   },
 });

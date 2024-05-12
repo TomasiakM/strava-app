@@ -28,6 +28,8 @@
     />
 
     <LeafletPolylineGridLine v-for="line in tilesGrid" :lat-lngs="line" />
+
+    <slot />
   </LMap>
 </template>
 

@@ -1,7 +1,26 @@
 <template>
   <div class="bg-white rounded overflow-hidden shadow">
     <div class="aspect-video">
-      <LeafletStaticMap :polyline="activity.polyline" />
+      <LeafletStaticMap :polyline="activity.polyline">
+        <LeafletUnlockedTile
+          v-for="tile in getNewTilesWithoutNewClusterAndSquareTiles(
+            activity.stravaId
+          )"
+          :tile="tile"
+        />
+
+        <LeafletSquareTile
+          v-for="tile in getActivityNewSquareTiles(activity.stravaId)"
+          :tile="tile"
+        />
+
+        <LeafletClusterTile
+          v-for="tile in getNewTilesWithoutNewSquareTiles(activity.stravaId)"
+          :tile="tile"
+        />
+
+        <LeafletNewTilesDetails :activity-id="activity.stravaId" />
+      </LeafletStaticMap>
     </div>
     <div class="p-2 flex justify-between items-center">
       <div class="flex items-center gap-2">
@@ -47,4 +66,10 @@ interface IProps {
 }
 
 defineProps<IProps>();
+
+const {
+  getActivityNewSquareTiles,
+  getNewTilesWithoutNewClusterAndSquareTiles,
+  getNewTilesWithoutNewSquareTiles,
+} = storeToRefs(useTilesStore());
 </script>
