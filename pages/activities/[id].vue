@@ -7,7 +7,31 @@
     >
       <div class="w-full" v-if="activity">
         <div class="aspect-[16/6]">
-          <LeafletStaticMap :polyline="activity.polyline" />
+          <LeafletStaticMap :polyline="activity.polyline">
+            <LeafletUnlockedTile
+              v-for="tile in getNewTilesWithoutNewClusterAndSquareTiles(
+                activity.stravaId
+              )"
+              :tile="tile"
+            />
+
+            <LeafletSquareTile
+              v-for="tile in getActivityNewSquareTiles(activity.stravaId)"
+              :tile="tile"
+            />
+
+            <LeafletClusterTile
+              v-for="tile in getNewTilesWithoutNewSquareTiles(
+                activity.stravaId
+              )"
+              :tile="tile"
+            />
+
+            <LeafletNewTilesDetails
+              :activity-id="activity.stravaId"
+              size="big"
+            />
+          </LeafletStaticMap>
         </div>
         <div class="p-2">
           <div class="flex items-center gap-2 mb-3">
@@ -37,6 +61,12 @@ const router = useRouter();
 
 const { isLoading, isError, activities } = storeToRefs(useActivitiesStore());
 const { fetchAllActivities } = useActivitiesStore();
+
+const {
+  getActivityNewSquareTiles,
+  getNewTilesWithoutNewClusterAndSquareTiles,
+  getNewTilesWithoutNewSquareTiles,
+} = storeToRefs(useTilesStore());
 
 const activity = computed(() => {
   if (isLoading.value || isError.value) {

@@ -1,8 +1,9 @@
 <template>
   <LControl
     position="topright"
-    class="rounded bg-white m-2 p-2 text-xs"
-    v-if="activityTiles"
+    class="rounded bg-white m-2 p-2"
+    :class="size === 'small' ? 'text-xs p-1' : 'text-base px-4 py-2'"
+    v-if="activityTiles && activityTiles.newTiles.length"
   >
     <div
       v-if="activityTiles.newTiles.length"
@@ -33,9 +34,12 @@
 <script lang="ts" setup>
 interface IProps {
   activityId: number;
+  size?: "small" | "big";
 }
 
-const props = defineProps<IProps>();
+const props = withDefaults(defineProps<IProps>(), {
+  size: "small",
+});
 
 const { activitiesTiles } = storeToRefs(useTilesStore());
 
