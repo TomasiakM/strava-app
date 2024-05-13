@@ -15,13 +15,21 @@
         layer-type="base"
         name="OpenStreetMap"
       />
-
       <LeafletPolyline
         v-for="activity in activities"
         :key="activity.stravaId"
         :activity="activity"
         @selected-polyline="bounds => (map.leafletObject as L.Map).fitBounds(bounds)"
       />
+
+      <LeafletUnlockedTile
+        v-for="tile in getMainTiles.tilesWithoutClusters"
+        :tile="tile"
+      />
+
+      <LeafletClusterTile v-for="tile in getMainTiles.clusters" :tile="tile" />
+
+      <LeafletSquareBox :lat-lngs="getMainTiles.square" />
 
       <LeafletPolylineGridLine v-for="line in tilesGrid" :lat-lngs="line" />
     </LMap>
@@ -30,6 +38,7 @@
 
 <script lang="ts" setup>
 const { activities } = storeToRefs(useActivitiesStore());
+const { getMainTiles } = storeToRefs(useTilesStore());
 
 const map = ref<any>();
 

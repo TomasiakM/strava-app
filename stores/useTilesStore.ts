@@ -71,5 +71,72 @@ export default defineStore("tiles", {
         );
       };
     },
+
+    getMainTiles(state) {
+      const tiles = state.activitiesTiles.reduce(
+        (prev: ITile[], curr: ITileDetails): ITile[] => [
+          ...prev,
+          ...curr.newTiles,
+        ],
+        []
+      );
+
+      const uniqueTiles = Object.values(
+        tiles.reduce(
+          (
+            acc: { [key: string]: ITile },
+            obj: ITile
+          ): { [key: string]: ITile } => ({
+            ...acc,
+            [`${obj.x}/${obj.y}/${obj.z}`]: obj,
+          }),
+          {}
+        )
+      );
+
+      const clusters = uniqueTiles.reduce(
+        (prev: ITile[], curr: ITile): ITile[] => {
+          const isCluster =
+            uniqueTiles.find(
+              (e) => e.x === curr.x + 1 && e.y === curr.y && e.z === curr.z
+            ) &&
+            uniqueTiles.find(
+              (e) => e.x === curr.x - 1 && e.y === curr.y && e.z === curr.z
+            ) &&
+            uniqueTiles.find(
+              (e) => e.x === curr.x && e.y === curr.y + 1 && e.z === curr.z
+            ) &&
+            uniqueTiles.find(
+              (e) => e.x === curr.x && e.y === curr.y - 1 && e.z === curr.z
+            );
+
+          if (isCluster) {
+            return [...prev, curr];
+          }
+
+          return prev;
+        },
+        []
+      );
+
+      const tilesWithoutClusters = uniqueTiles.filter(
+        (tile) =>
+          !clusters.some(
+            (cluster) =>
+              cluster.x == tile.x &&
+              cluster.y === tile.y &&
+              cluster.z === tile.z
+          )
+      );
+
+      const square = useFindMaxSquareBox(uniqueTiles);
+
+      return {
+        tiles,
+        tilesWithoutClusters,
+        clusters,
+        square,
+      };
+    },
   },
 });
