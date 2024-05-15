@@ -29,7 +29,7 @@
 
       <LeafletClusterTile v-for="tile in getMainTiles.clusters" :tile="tile" />
 
-      <LeafletSquareBox :lat-lngs="getMainTiles.square" />
+      <LeafletSquareBox :lat-lngs="getMainTiles.squareBox" />
 
       <LeafletPolylineGridLine v-for="line in tilesGrid" :lat-lngs="line" />
     </LMap>

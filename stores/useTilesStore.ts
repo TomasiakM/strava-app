@@ -26,98 +26,41 @@ export default defineStore("tiles", {
     },
   },
   getters: {
-    getActivityNewSquareTiles(state): (activityId: number) => ITile[] {
-      return (activityId: number) =>
-        state.activitiesTiles.find((e) => e.stravaActivityId == activityId)
-          ?.newSquareTiles || [];
-    },
-
-    getNewTilesWithoutNewClusterAndSquareTiles(
-      state
-    ): (activityId: number) => ITile[] {
-      return (activityId: number): ITile[] => {
+    getActivityTiles(state): (activityId: number) => {
+      [key in "tiles" | "clusters" | "tilesWithoutNewClusters"]: ITile[];
+    } {
+      return (activityId: number) => {
         const activityTiles = state.activitiesTiles.find(
-          (e) => e.stravaActivityId == activityId
+          (e) => e.stravaActivityId === activityId
         );
 
-        if (!activityTiles) return [];
+        if (!activityTiles) {
+          return {
+            tiles: [],
+            clusters: [],
+            tilesWithoutNewClusters: [],
+          };
+        }
 
-        return activityTiles.newTiles.filter(
-          (tile) =>
-            !(
-              activityTiles.newClusterTiles.some(
-                (t) => t.x === tile.x && t.y === tile.y && t.z === tile.z
-              ) ||
-              activityTiles.newSquareTiles.some(
-                (t) => t.x === tile.x && t.y === tile.y && t.z === tile.z
+        return {
+          tiles: activityTiles.newTiles,
+          clusters: activityTiles.newClusterTiles,
+          tilesWithoutNewClusters: activityTiles.newTiles.filter(
+            (e) =>
+              !activityTiles.newClusterTiles.some(
+                (t) => t.x === e.x && t.y === e.y && t.z === e.z
               )
-            )
-        );
+          ),
+        };
       };
     },
-    getNewTilesWithoutNewSquareTiles(state): (activityId: number) => ITile[] {
-      return (activityId: number): ITile[] => {
-        const activityTiles = state.activitiesTiles.find(
-          (e) => e.stravaActivityId == activityId
-        );
-
-        if (!activityTiles) return [];
-
-        return activityTiles.newClusterTiles.filter(
-          (tile) =>
-            !activityTiles.newSquareTiles.some(
-              (t) => t.x === tile.x && t.y === tile.y && t.z === tile.z
-            )
-        );
-      };
-    },
-
     getMainTiles(state) {
-      const tiles = state.activitiesTiles.reduce(
-        (prev: ITile[], curr: ITileDetails): ITile[] => [
-          ...prev,
-          ...curr.newTiles,
-        ],
-        []
-      );
+      const tiles = state.activitiesTiles.flatMap((e) => e.tiles);
+      const uniqueTiles: ITile[] = [
+        ...new Set(tiles.map((i) => JSON.stringify(i))),
+      ].map((i) => JSON.parse(i));
 
-      const uniqueTiles = Object.values(
-        tiles.reduce(
-          (
-            acc: { [key: string]: ITile },
-            obj: ITile
-          ): { [key: string]: ITile } => ({
-            ...acc,
-            [`${obj.x}/${obj.y}/${obj.z}`]: obj,
-          }),
-          {}
-        )
-      );
-
-      const clusters = uniqueTiles.reduce(
-        (prev: ITile[], curr: ITile): ITile[] => {
-          const isCluster =
-            uniqueTiles.find(
-              (e) => e.x === curr.x + 1 && e.y === curr.y && e.z === curr.z
-            ) &&
-            uniqueTiles.find(
-              (e) => e.x === curr.x - 1 && e.y === curr.y && e.z === curr.z
-            ) &&
-            uniqueTiles.find(
-              (e) => e.x === curr.x && e.y === curr.y + 1 && e.z === curr.z
-            ) &&
-            uniqueTiles.find(
-              (e) => e.x === curr.x && e.y === curr.y - 1 && e.z === curr.z
-            );
-
-          if (isCluster) {
-            return [...prev, curr];
-          }
-
-          return prev;
-        },
-        []
-      );
+      const clusters = state.activitiesTiles.flatMap((e) => e.newClusterTiles);
 
       const tilesWithoutClusters = uniqueTiles.filter(
         (tile) =>
@@ -129,13 +72,13 @@ export default defineStore("tiles", {
           )
       );
 
-      const square = useFindMaxSquareBox(uniqueTiles);
+      const squareBox = useFindMaxSquareBox(uniqueTiles);
 
       return {
         tiles,
         tilesWithoutClusters,
-        clusters,
-        square,
+        clusters: clusters,
+        squareBox,
       };
     },
   },

@@ -10,23 +10,14 @@ export default (tiles: ITile[]) => {
     let newSquareAvailable = true;
     while (newSquareAvailable) {
       var newSquareSizeTiles: ITile[] = [];
+
       for (let i = 0; i <= size; i++) {
         const rightTile = tiles.find(
-          (e) => e.x === tile.x + size && e.y === tile.y + i
+          (e) => e.x === tile.x + size && e.y === tile.y + i && e.z === tile.z
         );
         const bottomTile = tiles.find(
-          (e) => e.x === tile.x + i && e.y === tile.y + size
+          (e) => e.x === tile.x + i && e.y === tile.y + size && e.z === tile.z
         );
-
-        if (rightTile) {
-          const rightTileString = `${rightTile.x}/${rightTile.y}/${rightTile.z}`;
-          tileHashMap[rightTileString] = true;
-        }
-
-        if (bottomTile) {
-          const bottomTileString = `${bottomTile.x}/${bottomTile.y}/${bottomTile.z}`;
-          tileHashMap[bottomTileString] = true;
-        }
 
         if (rightTile && bottomTile) {
           newSquareSizeTiles = [...newSquareSizeTiles, rightTile, bottomTile];
@@ -34,12 +25,14 @@ export default (tiles: ITile[]) => {
         }
 
         newSquareAvailable = false;
+        break;
       }
 
       if (newSquareAvailable) {
-        size++;
         squareTiles = [...squareTiles, ...newSquareSizeTiles];
       }
+
+      size++;
     }
 
     return squareTiles;

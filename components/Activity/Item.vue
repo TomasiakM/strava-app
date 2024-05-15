@@ -3,19 +3,13 @@
     <div class="aspect-video">
       <LeafletStaticMap :polyline="activity.polyline">
         <LeafletUnlockedTile
-          v-for="tile in getNewTilesWithoutNewClusterAndSquareTiles(
-            activity.stravaId
-          )"
-          :tile="tile"
-        />
-
-        <LeafletSquareTile
-          v-for="tile in getActivityNewSquareTiles(activity.stravaId)"
+          v-for="tile in getActivityTiles(activity.stravaId)
+            .tilesWithoutNewClusters"
           :tile="tile"
         />
 
         <LeafletClusterTile
-          v-for="tile in getNewTilesWithoutNewSquareTiles(activity.stravaId)"
+          v-for="tile in getActivityTiles(activity.stravaId).clusters"
           :tile="tile"
         />
 
@@ -67,9 +61,5 @@ interface IProps {
 
 defineProps<IProps>();
 
-const {
-  getActivityNewSquareTiles,
-  getNewTilesWithoutNewClusterAndSquareTiles,
-  getNewTilesWithoutNewSquareTiles,
-} = storeToRefs(useTilesStore());
+const { getActivityTiles } = storeToRefs(useTilesStore());
 </script>

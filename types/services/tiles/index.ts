@@ -5,7 +5,6 @@ export interface ITileDetails {
   tiles: ITile[];
   newTiles: ITile[];
   newClusterTiles: ITile[];
-  newSquareTiles: ITile[];
 }
 
 export interface ITile {

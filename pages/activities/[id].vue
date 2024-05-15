@@ -9,21 +9,13 @@
         <div class="aspect-[16/6]">
           <LeafletStaticMap :polyline="activity.polyline">
             <LeafletUnlockedTile
-              v-for="tile in getNewTilesWithoutNewClusterAndSquareTiles(
-                activity.stravaId
-              )"
-              :tile="tile"
-            />
-
-            <LeafletSquareTile
-              v-for="tile in getActivityNewSquareTiles(activity.stravaId)"
+              v-for="tile in getActivityTiles(activity.stravaId)
+                .tilesWithoutNewClusters"
               :tile="tile"
             />
 
             <LeafletClusterTile
-              v-for="tile in getNewTilesWithoutNewSquareTiles(
-                activity.stravaId
-              )"
+              v-for="tile in getActivityTiles(activity.stravaId).clusters"
               :tile="tile"
             />
 
@@ -62,11 +54,7 @@ const router = useRouter();
 const { isLoading, isError, activities } = storeToRefs(useActivitiesStore());
 const { fetchAllActivities } = useActivitiesStore();
 
-const {
-  getActivityNewSquareTiles,
-  getNewTilesWithoutNewClusterAndSquareTiles,
-  getNewTilesWithoutNewSquareTiles,
-} = storeToRefs(useTilesStore());
+const { getActivityTiles } = storeToRefs(useTilesStore());
 
 const activity = computed(() => {
   if (isLoading.value || isError.value) {
