@@ -22,8 +22,7 @@ export default defineStore("athlete", {
         this.accessToken = response.accessToken;
 
         return true;
-      } catch (err) {
-        console.log(err);
+      } catch {
         return false;
       }
     },
@@ -42,16 +41,16 @@ export default defineStore("athlete", {
     async init(headers: Readonly<Record<string, string>>) {
       const authService = useAuthService();
       const athletesService = useAthletesService();
+
       try {
         const response = await authService.refresh(headers);
         this.accessToken = response.accessToken;
 
-        const athlete = await athletesService.getAuthorized();
+        const athlete = await athletesService.getInitData();
         this.athlete = athlete;
 
         return true;
-      } catch (err) {
-        console.log(err);
+      } catch {
         return false;
       }
     },
