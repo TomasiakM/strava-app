@@ -13,10 +13,10 @@ Application imlementing [back-end](https://github.com/TomasiakM/StravaApp) featu
 
 Project is created with:
 
-- [Nuxt 3]("https://nuxt.com/docs/getting-started/installation")
-- [Tailwind CSS]("https://tailwindcss.com/docs/installation")
-- [Pinia]("https://pinia.vuejs.org/introduction.html")
-- [Vue Leafleat]("https://github.com/vue-leaflet/vue-leaflet")
+- [Nuxt 3](https://nuxt.com/docs/getting-started/installation)
+- [Tailwind CSS](https://tailwindcss.com/docs/installation)
+- [Pinia](https://pinia.vuejs.org/introduction.html)
+- [Vue Leafleat](https://github.com/vue-leaflet/vue-leaflet)
 
 ## Pages
 
