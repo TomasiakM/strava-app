@@ -13,6 +13,14 @@ export default defineStore("athlete", {
   },
   actions: {
     async login(code: string) {
+      const { isDemoMode } = useDemoStore();
+      if (isDemoMode) {
+        this.athlete = useAthleteDemoData();
+        this.accessToken = "demo_access_token";
+
+        return true;
+      }
+
       const authService = useAuthService();
 
       try {
@@ -27,6 +35,9 @@ export default defineStore("athlete", {
       }
     },
     async refresh() {
+      const { isDemoMode } = useDemoStore();
+      if (isDemoMode) return true;
+
       const authService = useAuthService();
 
       try {

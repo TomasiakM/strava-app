@@ -41,12 +41,15 @@ const {
 const {
   query: { error },
 } = useRoute();
+const router = useRouter();
+const demoStore = useDemoStore();
 
 const redirect = `${baseUrl}/strava-redirect`;
 const stravaLoginUrl = `http://www.strava.com/oauth/authorize?client_id=${stravaClientId}&response_type=code&redirect_uri=${redirect}&approval_prompt=force&scope=read,activity:read,activity:read_all`;
 
 const demo = () => {
-  console.log("[TODO]: Set application to demo mode");
+  demoStore.setPageToDemoMode();
+  router.push("/strava-redirect?code=demo_code");
 };
 
 definePageMeta({

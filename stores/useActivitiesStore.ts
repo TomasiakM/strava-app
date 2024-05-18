@@ -10,6 +10,14 @@ export default defineStore("activities", {
   }),
   actions: {
     async fetchAllActivities() {
+      const { isDemoMode } = useDemoStore();
+      if (isDemoMode) {
+        this.activities = useActivitiesDemoData();
+        this.isLoading = false;
+
+        return true;
+      }
+
       this.isLoading = true;
       this.isError = false;
 

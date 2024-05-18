@@ -10,6 +10,14 @@ export default defineStore("tiles", {
   }),
   actions: {
     async fetchAllActivitiesTiles() {
+      const { isDemoMode } = useDemoStore();
+      if (isDemoMode) {
+        this.activitiesTiles = useActivitiesTilesDemoData();
+        this.isLoading = false;
+
+        return true;
+      }
+
       this.isLoading = true;
       this.isError = false;
 
