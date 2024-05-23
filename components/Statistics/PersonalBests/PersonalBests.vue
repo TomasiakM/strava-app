@@ -15,21 +15,23 @@
 
       <template #body>
         {{ maxActivitiesSportType.sportType }} -
-        {{ maxActivitiesSportType.size }}
+        {{ maxActivitiesSportType.count }}
       </template>
     </StatisticsPersonalBestsItem>
-    <StatisticsPersonalBestsItem v-if="bestYear">
+    <StatisticsPersonalBestsItem v-if="maxYearlyDistance">
       <div>Najlepszy rok</div>
 
       <template #body>
-        {{ bestYear.year }} - {{ useDistance(bestYear.distance) }} km
+        {{ maxYearlyDistance.year }} -
+        {{ useDistance(maxYearlyDistance.distance) }} km
       </template>
     </StatisticsPersonalBestsItem>
-    <StatisticsPersonalBestsItem v-if="bestMonth">
+    <StatisticsPersonalBestsItem v-if="maxMonthlyDistance">
       <div>Najlepszy miesiąc</div>
 
       <template #body>
-        {{ bestMonth.date }} - {{ useDistance(bestMonth.distance) }} km
+        {{ maxMonthlyDistance.date }} -
+        {{ useDistance(maxMonthlyDistance.distance) }} km
       </template>
     </StatisticsPersonalBestsItem>
     <StatisticsPersonalBestsItem v-if="maxActivityDistance">
@@ -114,187 +116,19 @@
 </template>
 
 <script lang="ts" setup>
-import type { IActivity } from "@/types/services/activities";
-import type { ITileDetails } from "@/types/services/tiles";
-
 const { activities } = storeToRefs(useActivitiesStore());
-const { activitiesTiles } = storeToRefs(useTilesStore());
 
 const totalActivities = computed(() => activities.value.length);
 
-const bestMonth = computed(() => {
-  const activitiesByMonth = activities.value.reduce((prev, curr) => {
-    const date = new Date(curr.startDate);
-    const month = `${date.getMonth()}/${date.getFullYear()}`;
+const maxYearlyDistance = useMaxYearlyDistance();
+const maxMonthlyDistance = useMaxMonthlyDistance();
 
-    if (!prev[month]) {
-      prev[month] = [];
-    }
+const maxActivitySpeed = useMaxSpeed();
+const maxActivityDistance = useMaxDistance();
+const maxActivityMovingTime = useMaxMovingTime();
+const maxActivitiesSportType = useMaxSportType();
 
-    prev[month] = [...prev[month], curr];
-
-    return prev;
-  }, {} as { [key: string]: IActivity[] });
-
-  const activitiesMonthStats = Object.entries(activitiesByMonth).map(
-    ([_, monthlyActivities]) => {
-      const distance = monthlyActivities.reduce((prev, curr) => {
-        return prev + curr.distance;
-      }, 0);
-
-      const date = new Date(monthlyActivities[0].startDate);
-      let month: number | string = date.getMonth() + 1;
-      if (month < 10) {
-        month = `0${month}`;
-      }
-      const stringDate = `${month}/${date.getFullYear()}`;
-
-      return { distance, date: stringDate };
-    }
-  );
-
-  return activitiesMonthStats.reduce((prev, curr) => {
-    if (!prev || curr.distance > prev.distance) {
-      return curr;
-    }
-
-    return prev;
-  }, null as { distance: number; date: string } | null);
-});
-
-const bestYear = computed(() => {
-  const activitiesByYear = activities.value.reduce((prev, curr) => {
-    const date = new Date(curr.startDate);
-    const year = date.getFullYear();
-
-    if (!prev[year]) {
-      prev[year] = [];
-    }
-
-    prev[year] = [...prev[year], curr];
-
-    return prev;
-  }, {} as { [key: string]: IActivity[] });
-
-  const activitiesYearStats = Object.entries(activitiesByYear).map(
-    ([_, yearlyActivities]) => {
-      const distance = yearlyActivities.reduce((prev, curr) => {
-        return prev + curr.distance;
-      }, 0);
-
-      const year = new Date(yearlyActivities[0].startDate).getFullYear();
-
-      return { distance, year };
-    }
-  );
-
-  return activitiesYearStats.reduce((prev, curr) => {
-    if (!prev || curr.distance > prev.distance) {
-      return curr;
-    }
-
-    return prev;
-  }, null as { distance: number; year: number } | null);
-});
-
-const maxActivityDistance = computed(() => {
-  return activities.value.reduce((prev, curr) => {
-    if (!prev || curr.distance > prev.distance) {
-      return curr;
-    }
-
-    return prev;
-  }, null as IActivity | null);
-});
-
-const maxActivitySpeed = computed(() => {
-  return activities.value.reduce((prev, curr) => {
-    if (!prev || curr.averageSpeed > prev.averageSpeed) {
-      return curr;
-    }
-
-    return prev;
-  }, null as IActivity | null);
-});
-
-const maxActivityMovingTime = computed(() => {
-  return activities.value.reduce((prev, curr) => {
-    if (!prev || curr.movingTime > prev.movingTime) {
-      return curr;
-    }
-
-    return prev;
-  }, null as IActivity | null);
-});
-
-const maxActivitiesSportType = computed(() => {
-  const groupedActivities = activities.value.reduce((prev, curr) => {
-    if (!prev[curr.sportType]) {
-      prev[curr.sportType] = [];
-    }
-
-    prev[curr.sportType] = [...prev[curr.sportType], curr];
-
-    return prev;
-  }, {} as { [key: string]: IActivity[] });
-
-  return Object.entries(groupedActivities).reduce((prev, curr) => {
-    if (!prev || curr[1].length > prev.size) {
-      return { size: curr[1].length, sportType: curr[1][0].sportType };
-    }
-
-    return prev;
-  }, null as { size: number; sportType: string } | null);
-});
-
-const maxActivityTiles = computed(() => {
-  const maxActivityTiles = activitiesTiles.value.reduce((prev, curr) => {
-    if (!prev || curr.tiles.length > prev.tiles.length) {
-      return curr;
-    }
-
-    return prev;
-  }, null as ITileDetails | null);
-
-  const activity = activities.value.find(
-    (e) => e.stravaId == maxActivityTiles?.stravaActivityId
-  );
-
-  return { size: maxActivityTiles?.tiles.length || 0, activity };
-});
-
-const maxActivityNewTiles = computed(() => {
-  const maxActivityNewTiles = activitiesTiles.value.reduce((prev, curr) => {
-    if (!prev || curr.newTiles.length > prev.newTiles.length) {
-      return curr;
-    }
-
-    return prev;
-  }, null as ITileDetails | null);
-
-  const activity = activities.value.find(
-    (e) => e.stravaId == maxActivityNewTiles?.stravaActivityId
-  );
-
-  return { size: maxActivityNewTiles?.newTiles.length || 0, activity };
-});
-
-const maxActivityNewClusters = computed(() => {
-  const maxActivityNewClusters = activitiesTiles.value.reduce((prev, curr) => {
-    if (!prev || curr.newClusterTiles.length > prev.newClusterTiles.length) {
-      return curr;
-    }
-
-    return prev;
-  }, null as ITileDetails | null);
-
-  const activity = activities.value.find(
-    (e) => e.stravaId == maxActivityNewClusters?.stravaActivityId
-  );
-
-  return {
-    size: maxActivityNewClusters?.newClusterTiles.length || 0,
-    activity,
-  };
-});
+const maxActivityTiles = useMaxTiles();
+const maxActivityNewTiles = useMaxNewTiles();
+const maxActivityNewClusters = useMaxNewClusters();
 </script>
