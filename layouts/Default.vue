@@ -44,6 +44,11 @@
               <SvgFolder class="w-6 h-6" />
               <div>Aktywności</div>
             </AsideLink>
+
+            <AsideLink to="/statistics">
+              <SvgStatistics class="w-6 h-6" />
+              <div>Statystyki</div>
+            </AsideLink>
           </div>
         </div>
         <div class="p-1 flex justify-center bg-white">
