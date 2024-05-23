@@ -4,6 +4,8 @@
     <div class="flex justify-center">
       <StatisticsActiveDays />
     </div>
+
+    <StatisticsPersonalBests />
   </div>
 </template>
 
