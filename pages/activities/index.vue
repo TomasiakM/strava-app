@@ -1,10 +1,6 @@
 <template>
   <div class="p-2">
-    <DataContainer
-      :is-loading="isLoading"
-      :is-error="isError"
-      @refresh="fetchAllActivities()"
-    >
+    <DataContainer>
       <div class="grid grid-cols-2 xl:grid-cols-3 gap-x-2 gap-y-4 mb-4">
         <ActivityItem
           v-for="activity in pagedActivities"
@@ -35,7 +31,6 @@ const pageSize = ref(12);
 
 const { isLoading, isError, activities } = storeToRefs(useActivitiesStore());
 
-const { fetchAllActivities } = useActivitiesStore();
 watch(
   () => activities.value,
   () => {

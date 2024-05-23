@@ -1,13 +1,19 @@
 <template>
-  <div v-if="isLoading" class="flex justify-center my-4">
+  <div
+    v-if="isActivityStoreLoading || isTilesStoreLoading"
+    class="flex justify-center my-4"
+  >
     <Spinner />
   </div>
-  <div v-else-if="isError" class="flex flex-col justify-center items-center">
+  <div
+    v-else-if="isActivityStoreError || isTilesStoreError"
+    class="flex flex-col items-center"
+  >
     <div class="text-danger text-lg font-semibold">
       Coś poszło nie tak spróbój ponownie
     </div>
     <button
-      @click="$emit('refresh')"
+      @click="refreshStores()"
       class="text-white bg-danger rounded px-2 py-1"
     >
       Spróbuj pownonie
@@ -19,15 +25,22 @@
 </template>
 
 <script lang="ts" setup>
-interface IProps {
-  isLoading: boolean;
-  isError: boolean;
-}
+const { isLoading: isActivityStoreLoading, isError: isActivityStoreError } =
+  storeToRefs(useActivitiesStore());
+const { isLoading: isTilesStoreLoading, isError: isTilesStoreError } =
+  storeToRefs(useTilesStore());
 
-interface IEmits {
-  (e: "refresh"): void;
-}
+const refreshStores = () => {
+  if (!isActivityStoreLoading && isActivityStoreError) {
+    const activitiesStore = useActivitiesStore();
 
-defineProps<IProps>();
-defineEmits<IEmits>();
+    activitiesStore.fetchAllActivities();
+  }
+
+  if (!isTilesStoreLoading && isTilesStoreError) {
+    const tilesStore = useTilesStore();
+
+    tilesStore.fetchAllActivitiesTiles();
+  }
+};
 </script>
