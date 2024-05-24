@@ -2,7 +2,7 @@
   <LMap
     ref="map"
     :zoom="4"
-    :max-zoom="13"
+    :max-zoom="14"
     :center="[0, 0]"
     :options="{
       attributionControl: false,
@@ -60,7 +60,7 @@ const tilesGrid = useTileGrid(bounds, zoom);
 
 const onReady = () => {
   const b = (polyline.value.leafletObject as L.Polyline).getBounds();
-  (map.value?.leafletObject as L.Map).fitBounds(b);
+  (map.value?.leafletObject as L.Map).fitBounds(b, { padding: [50, 50] });
 
   bounds.value = (map.value?.leafletObject as L.Map).getBounds();
   zoom.value = (map.value?.leafletObject as L.Map).getZoom();
