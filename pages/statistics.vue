@@ -7,6 +7,8 @@
       </div>
 
       <StatisticsPersonalBests />
+
+      <StatisticsChartYearlyDistance />
     </div>
   </DataContainer>
 </template>
