@@ -10,56 +10,22 @@
 </template>
 
 <script lang="ts" setup>
-const groupedActivities = useGroupedByMonthActivities();
-
-const distanceByMonths = computed(() =>
-  groupedActivities.value.reduce((prev, { year, month, activities }) => {
-    const distance = activities.reduce(
-      (prevDistance, { distance }) => prevDistance + distance,
-      0
-    );
-
-    if (!prev[year]) prev[year] = [];
-
-    return { ...prev, [year]: [...prev[year], { month, distance }] };
-  }, {} as { [key: string]: { month: number; distance: number }[] })
-);
-
-const distanceByMonthsWithEmptyMonths = computed(() => {
-  return Object.entries(distanceByMonths.value).reduce(
-    (prev, [year, objects]) => {
-      let emptyMonths = [] as { month: number; distance: number }[];
-
-      for (let i = 0; i < 12; i++) {
-        emptyMonths = [...emptyMonths, { month: i, distance: 0 }];
-      }
-
-      prev[year] = [
-        ...objects,
-        ...emptyMonths.filter(
-          (e) => !objects.find((el) => el.month === e.month)
-        ),
-      ];
-
-      prev[year] = prev[year].sort((a, b) => a.month - b.month);
-
-      return prev;
-    },
-    {} as { [key: string]: { month: number; distance: number }[] }
-  );
-});
+const { statistics } = storeToRefs(useStatisticsStore());
 
 const series = computed(() => {
-  return Object.entries(distanceByMonthsWithEmptyMonths.value).map(
-    ([key, value]) => {
-      const distances = value.map(({ distance }) => distance);
-
-      return { name: key, data: distances };
+  return Object.values(statistics.value).map((obj) => {
+    return Object.values(obj).reduce(
+      (prev, { year, distance }) => {
+        return {
+          name: year.toString(),
+          data: [...prev.data, distance],
+        };
+      },
+      { name: new Date().getFullYear().toString(), data: [] } as {
+        name: string;
+        data: number[];
     }
   );
 });
-
-const yDistance = (e: number) => {
-  return (e / 1000).toFixed(0);
-};
+});
 </script>

@@ -11,9 +11,13 @@ export default defineStore("activities", {
   actions: {
     async fetchAllActivities() {
       const { isDemoMode } = useDemoStore();
+      const { updateStatistics } = useStatisticsStore();
+
       if (isDemoMode) {
         this.activities = useActivitiesDemoData();
         this.isLoading = false;
+
+        updateStatistics();
 
         return true;
       }
@@ -26,6 +30,8 @@ export default defineStore("activities", {
       try {
         const activities = await activitiesStore.getAll();
         this.activities = activities;
+
+        updateStatistics();
       } catch (err) {
         this.isError = true;
       } finally {
