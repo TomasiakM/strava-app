@@ -5,14 +5,14 @@ export default () => {
     public: { baseApiUrl },
   } = useRuntimeConfig();
 
-  const athleteStore = useAthleteStore();
+  const userStore = useUserStore();
 
   const getInitData = () => {
     return $fetch<IAthlete>("api/athlete", {
       method: "GET",
       baseURL: baseApiUrl,
       headers: {
-        Authorization: `Bearer ${athleteStore.accessToken}`,
+        Authorization: `Bearer ${userStore.accessToken}`,
       },
     });
   };

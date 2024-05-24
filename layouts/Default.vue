@@ -69,7 +69,7 @@
 
 <script lang="ts" setup>
 const route = useRoute();
-const { athlete } = storeToRefs(useAthleteStore());
+const { athlete } = storeToRefs(useUserStore());
 
 const isOpen = ref(false);
 

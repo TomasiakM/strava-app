@@ -1,8 +1,8 @@
 const ANONYMOUS_ROUTES = ["/login", "/strava-redirect"];
 
 export default defineNuxtRouteMiddleware((to, from) => {
-  const { isAuthenticated } = storeToRefs(useAthleteStore());
-  console.log("MIDDLEWARE");
+  const { isAuthenticated } = storeToRefs(useUserStore());
+
   if (isAuthenticated.value && ANONYMOUS_ROUTES.includes(to.path)) {
     return navigateTo("/", { replace: true });
   }

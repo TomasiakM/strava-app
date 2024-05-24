@@ -15,8 +15,8 @@ export default async <TResponse>(
       err?.response?.status === 401 &&
       !requestsAllowed401Repsonse.some((e) => err.response.url.includes(e))
     ) {
-      const athleteStore = useAthleteStore();
-      const isRefreshSuccessful = await athleteStore.refresh();
+      const userStore = useUserStore();
+      const isRefreshSuccessful = await userStore.refresh();
 
       if (isRefreshSuccessful) {
         return await fetchRequest<TResponse>(request, opts);
@@ -34,14 +34,14 @@ const fetchRequest = <TResponse = undefined>(
   const {
     public: { baseApiUrl },
   } = useRuntimeConfig();
-  const athleteStore = useAthleteStore();
+  const userStore = useUserStore();
 
   return $fetch<TResponse>(request, {
     method: "GET",
     ...opts,
     baseURL: baseApiUrl,
     headers: {
-      Authorization: `Bearer ${athleteStore.accessToken}`,
+      Authorization: `Bearer ${userStore.accessToken}`,
       ...opts.headers,
     },
   });

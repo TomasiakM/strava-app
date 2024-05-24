@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import useAuthService from "@/requests/auth";
 import useAthletesService from "@/requests/athletes";
 
-export default defineStore("athlete", {
+export default defineStore("user", {
   state: () => ({
     athlete: null as IAthlete | null,
     accessToken: null as string | null,

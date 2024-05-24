@@ -7,7 +7,7 @@
 <script lang="ts" setup>
 const { query } = useRoute();
 const router = useRouter();
-const athleteStore = useAthleteStore();
+const userStore = useUserStore();
 
 const loginErrorRedirect = () => {
   router.replace({
@@ -21,7 +21,7 @@ onMounted(async () => {
     return loginErrorRedirect();
   }
 
-  const loginSuccessully = await athleteStore.login(query.code);
+  const loginSuccessully = await userStore.login(query.code);
   if (loginSuccessully) {
     return router.replace("/");
   }

@@ -3,12 +3,12 @@
 </template>
 
 <script lang="ts" setup>
-const athleteStore = useAthleteStore();
+const userStore = useUserStore();
 const activitiesStore = useActivitiesStore();
 const tilesStore = useTilesStore();
 
 const fetchAllNecessaryData = () => {
-  if (athleteStore.isAuthenticated) {
+  if (userStore.isAuthenticated) {
     activitiesStore.fetchAllActivities();
     tilesStore.fetchAllActivitiesTiles();
   }
@@ -19,9 +19,9 @@ onMounted(() => {
 });
 
 watch(
-  () => athleteStore.isAuthenticated,
+  () => userStore.isAuthenticated,
   () => {
-    if (athleteStore.isAuthenticated) {
+    if (userStore.isAuthenticated) {
       fetchAllNecessaryData();
     }
   }
