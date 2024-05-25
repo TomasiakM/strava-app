@@ -1,7 +1,7 @@
 <template>
   <Chart
-    id="yearly-distance-chart"
-    title="Dystans na przestrzeni roku"
+    id="yearly-distance-cumulative-chart"
+    title="Łączny dystans na przestrzeni roku"
     :series="series"
     :xAxisFormatter="(e: number) => useChartAxisMonth(e)"
     :yAxisFormatter="(e: number) => useChartAxisDistance(e)"
@@ -18,7 +18,10 @@ const series = computed(() => {
       (prev, { year, distance }) => {
         return {
           name: year.toString(),
-          data: [...prev.data, distance],
+          data: [
+            ...prev.data,
+            (prev.data[prev.data.length - 1] || 0) + distance,
+          ],
         };
       },
       { name: new Date().getFullYear().toString(), data: [] } as {
