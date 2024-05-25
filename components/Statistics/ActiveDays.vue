@@ -1,31 +1,33 @@
 <template>
-  <div class="bg-white p-2 rounded shadow">
+  <div class="bg-white p-2 rounded shadow w-fit max-w-full">
     <div class="flex justify-end mb-2">
       <select v-model="year">
         <option v-for="y in listOfYears" :value="y">{{ y }}</option>
       </select>
     </div>
-    <table>
-      <tbody class="grid gap-[1px]">
-        <tr
-          v-for="(value, key) in getSelectedYearElements"
-          class="flex gap-[1px] h-[10px]"
-        >
-          <td class="w-[30px] h-[10px] text-xs relative">
-            <div class="absolute top-1/2 -translate-y-1/2">
-              {{ idxToDayOfWeek(key as string) }}
-            </div>
-          </td>
-          <td v-for="day in value" class="w-[10px] h-[10px] p-0">
-            <div
-              v-if="day"
-              class="rounded-xs w-full h-full"
-              :class="getDayColor(day.distance)"
-            ></div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="overflow-x-auto">
+      <table class="h-20 mx-auto">
+        <tbody class="grid gap-[1px]">
+          <tr
+            v-for="(value, key) in getSelectedYearElements"
+            class="flex gap-[1px] h-[10px]"
+          >
+            <td class="w-[30px] h-[10px] text-xs relative">
+              <div class="absolute top-1/2 -translate-y-1/2">
+                {{ idxToDayOfWeek(key as string) }}
+              </div>
+            </td>
+            <td v-for="day in value" class="w-[10px] h-[10px] p-0">
+              <div
+                v-if="day"
+                class="rounded-xs w-full h-full"
+                :class="getDayColor(day.distance)"
+              ></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="flex justify-end gap-[2px] mt-2">
       <div class="w-[10px] h-[10px] rounded-xs bg-background"></div>
       <div class="w-[10px] h-[10px] rounded-xs bg-primary/25"></div>

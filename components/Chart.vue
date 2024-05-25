@@ -1,11 +1,13 @@
 <template>
   <ClientOnly>
-    <VueApexCharts
-      class="bg-white p-2 rounded shadow"
-      :height="400"
-      :options="options"
-      :series="series"
-    />
+    <div class="bg-white rounded shadow">
+      <VueApexCharts
+        class="m-2"
+        :height="400"
+        :options="options"
+        :series="series"
+      />
+    </div>
   </ClientOnly>
 </template>
 
