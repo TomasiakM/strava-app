@@ -1,6 +1,6 @@
 # Strava data visualizer - front-end
 
-Application imlementing [back-end](https://github.com/TomasiakM/StravaApp) features. It is made in Nuxt 3 combined with Pinia, TailwindCSS and Leaflet packages.
+Application imlementing [back-end](https://github.com/TomasiakM/StravaApp) features. Main goal of this app is to display strava activities with extrea tile features.
 
 ## Table of context
 
@@ -17,12 +17,13 @@ Project is created with:
 - [Tailwind CSS](https://tailwindcss.com/docs/installation)
 - [Pinia](https://pinia.vuejs.org/introduction.html)
 - [Vue Leafleat](https://github.com/vue-leaflet/vue-leaflet)
+- [Apex Charts](https://apexcharts.com/docs/vue-charts)
 
 ## Pages
 
 ### Login page
 
-To use application, first user must authorize this app via Strava. To achieve this click "Connect with Strava" button, login into Strava account and authorize this app with all mentioned permissions.
+To use application, first user must authorize this app via Strava. To achieve this click "Connect with Strava" button, login into Strava account and authorize this app with all mentioned permissions. User can also check app via demo mode.
 
 ![Login page](docs/images/login.png)
 
@@ -40,13 +41,19 @@ Activities page contains a paged list of activities. Listed items contains basic
 
 ### Activity page
 
-This page shows detailed information about a specific activity with new unlocked tiles, clusters and squares.
+This page shows detailed information about a specific activity.
 
 ![Activity page](docs/images/activity.png)
 
+### Statistics page
+
+Statistics are calculated based on all activities. User can find there: active days graph, general best statistics and two charts with distans and cumulative distance over the year.
+
+![Statistics page](docs/images/statistics.png)
+
 ## Setup
 
-App require .env file with following variables:
+To use app in demo mode without backend api, there is no need to create .env file. Othervice create it with following variables:
 
 ```shell
 NUXT_PUBLIC_STRAVA_CLIENT_ID=YOUR_STRAVA_CLIENT_ID
@@ -84,7 +91,5 @@ bun run dev
 
 List of things to-do in future:
 
-- Add demo mode
-- Add statistics page
 - Add activity types icons
 - Add support for activities without gpx track
