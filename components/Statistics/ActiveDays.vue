@@ -9,15 +9,15 @@
       <table class="h-20 mx-auto">
         <tbody class="grid gap-[1px]">
           <tr
-            v-for="(value, key) in getSelectedYearElements"
+            v-for="(dayOfWeekDistances, dayOfWeek) in distancesByDayOfWeek"
             class="flex gap-[1px] h-[10px]"
           >
             <td class="w-[30px] h-[10px] text-xs relative">
               <div class="absolute top-1/2 -translate-y-1/2">
-                {{ idxToDayOfWeek(key as string) }}
+                {{ idxToDayOfWeek(dayOfWeek as string) }}
               </div>
             </td>
-            <td v-for="day in value" class="w-[10px] h-[10px] p-0">
+            <td v-for="day in dayOfWeekDistances" class="w-[10px] h-[10px] p-0">
               <div
                 v-if="day"
                 class="rounded-xs w-full h-full"
@@ -39,91 +39,77 @@
 </template>
 
 <script lang="ts" setup>
-import type { IActivity } from "@/types/services/activities";
-
 const { activities } = storeToRefs(useActivitiesStore());
 const year = ref(new Date().getFullYear());
 
 const getDayColor = (distance: number) => {
-  if (maxDistanceDay.value > 0) {
-    if (distance >= maxDistanceDay.value * 0.75) return "bg-primary";
-    if (distance >= maxDistanceDay.value * 0.5) return "bg-primary/75";
-    if (distance >= maxDistanceDay.value * 0.3) return "bg-primary/50";
+  if (maxDistanceInSelectedYear.value > 0) {
+    if (distance >= maxDistanceInSelectedYear.value * 0.75) return "bg-primary";
+    if (distance >= maxDistanceInSelectedYear.value * 0.5)
+      return "bg-primary/75";
+    if (distance >= maxDistanceInSelectedYear.value * 0.3)
+      return "bg-primary/50";
     if (distance > 0) return "bg-primary/25";
   }
 
   return "bg-background";
 };
 
-const firstYear = computed(() => {
-  return activities.value.reduce((prev, curr) => {
-    const year = new Date(curr.startDate).getFullYear();
-
-    if (year < prev) {
-      return year;
-    }
-
-    return prev;
-  }, new Date().getFullYear());
-});
+const { statistics } = storeToRefs(useStatisticsStore());
 
 const listOfYears = computed(() => {
-  const currentYear = new Date().getFullYear();
-  if (firstYear.value === currentYear) {
-    return [currentYear];
+  let listOfYears = Object.keys(statistics.value).map((e) => Number(e));
+
+  const today = new Date();
+  const currnetYear = today.getFullYear();
+  if (!listOfYears.includes(currnetYear)) {
+    listOfYears = [...listOfYears, currnetYear];
   }
 
-  let years: number[] = [];
-  for (let i = firstYear.value; i <= currentYear; i++) {
-    years = [...years, i];
-  }
-
-  return years.reverse();
+  return listOfYears.reverse();
 });
 
-const maxDistanceDay = computed(() =>
-  Object.values(getSelectedYearElements.value).reduce((prev, curr) => {
-    const max = curr.reduce((previous, current) => {
-      if (!current) return previous;
+const maxDistanceInSelectedYear = computed(() => {
+  const maxDistance = activities.value.reduce((prev, curr) => {
+    const activityYear = new Date(curr.startDate).getFullYear();
+    if (year.value !== activityYear) return prev;
 
-      if (current.distance > previous) {
-        return current.distance;
-      }
+    if (curr.distance > prev) return curr.distance;
 
-      return previous;
-    }, 0);
-
-    if (max > prev) {
-      return max;
-    }
     return prev;
-  }, 0)
-);
+  }, 0);
 
-const groupedActivitiesByDate = computed(() =>
-  activities.value.reduce(
-    (groups, curr) => {
-      const date = new Date(curr.startDate).toDateString();
+  return maxDistance;
+});
 
-      if (!groups[date]) {
-        groups[date] = { distance: 0, activities: [] };
+const activitiesByDay = computed(() => {
+  const activitiesByDay = activities.value.reduce(
+    (prev, curr) => {
+      const date = new Date(curr.startDate);
+      const activityYear = date.getFullYear();
+
+      if (year.value !== activityYear) return prev;
+
+      const key = date.toDateString();
+      if (!prev[key]) {
+        prev[key] = { distance: 0 };
       }
 
-      groups[date].distance += curr.distance;
-      groups[date].activities = [...groups[date].activities, curr];
+      prev[key] = { distance: prev[key].distance + curr.distance };
 
-      return groups;
+      return prev;
     },
     {} as {
       [key: string]: {
         distance: number;
-        activities: IActivity[];
       };
     }
-  )
-);
+  );
 
-const getSelectedYearElements = computed(() => {
+  return activitiesByDay;
+});
+
+const distancesByDayOfWeek = computed(() => {
   const first = new Date(`1/1/${year.value}`);
   const last = new Date(`12/31/${year.value}`);
 
@@ -133,7 +119,7 @@ const getSelectedYearElements = computed(() => {
   }
 
   const firstDay = days[0].getDay() === 0 ? 7 : days[0].getDay();
-  const datesByDayOfWeek = days.reduce((prev, curr) => {
+  const distancesByDayOfWeek = days.reduce((prev, curr) => {
     let currDayOfWeek = curr.getDay() === 0 ? 7 : curr.getDay();
 
     if (!prev[currDayOfWeek]) {
@@ -150,17 +136,13 @@ const getSelectedYearElements = computed(() => {
         ...prev[currDayOfWeek],
         {
           day: curr,
-          activities:
-            groupedActivitiesByDate.value[curr.toDateString()]?.activities ||
-            [],
-          distance:
-            groupedActivitiesByDate.value[curr.toDateString()]?.distance || 0,
+          distance: activitiesByDay.value[curr.toDateString()]?.distance || 0,
         },
       ],
     };
-  }, {} as { [key: string]: ({ day: Date; activities: IActivity[]; distance: number } | null)[] });
+  }, {} as { [key: string]: ({ day: Date; distance: number } | null)[] });
 
-  return datesByDayOfWeek;
+  return distancesByDayOfWeek;
 });
 
 const idxToDayOfWeek = (key: string) => {
