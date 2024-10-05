@@ -2,6 +2,7 @@
   <ClientOnly>
     <div class="bg-white rounded shadow">
       <VueApexCharts
+        v-if="series.length"
         class="m-2"
         :height="400"
         :options="options"

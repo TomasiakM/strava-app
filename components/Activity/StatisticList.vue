@@ -1,6 +1,6 @@
 <template>
   <div class="grid gap-2 grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-    <ActivityStatisticItem>
+    <ActivityStatisticItem v-if="activity.distance">
       <template #icon>
         <SvgDistance />
       </template>
@@ -19,7 +19,7 @@
       </div>
     </ActivityStatisticItem>
 
-    <ActivityStatisticItem>
+    <ActivityStatisticItem v-if="activity.averageSpeed">
       <template #icon>
         <SvgSpeed />
       </template>
@@ -35,7 +35,7 @@
       </div>
     </ActivityStatisticItem>
 
-    <ActivityStatisticItem>
+    <ActivityStatisticItem v-if="activity.distance && activity.movingTime">
       <template #icon>
         <SvgPace />
       </template>
@@ -45,7 +45,7 @@
       </div>
     </ActivityStatisticItem>
 
-    <ActivityStatisticItem>
+    <ActivityStatisticItem v-if="activity.totalElevationGain">
       <template #icon>
         <SvgElevation />
       </template>
@@ -83,7 +83,7 @@
       </div>
     </ActivityStatisticItem>
 
-    <ActivityStatisticItem>
+    <ActivityStatisticItem v-if="activity.calories">
       <template #icon>
         <SvgFire />
       </template>
