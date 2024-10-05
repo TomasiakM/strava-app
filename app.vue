@@ -6,11 +6,13 @@
 const userStore = useUserStore();
 const activitiesStore = useActivitiesStore();
 const tilesStore = useTilesStore();
+const achievementStore = useAchievementsStore();
 
 const fetchAllNecessaryData = () => {
   if (userStore.isAuthenticated) {
     activitiesStore.fetchAllActivities();
     tilesStore.fetchAllActivitiesTiles();
+    achievementStore.fetchAllAchievements();
   }
 };
 
