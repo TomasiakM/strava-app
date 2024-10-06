@@ -49,6 +49,11 @@
               <SvgStatistics class="w-6 h-6" />
               <div>Statystyki</div>
             </AsideLink>
+
+            <AsideLink to="/achievements">
+              <SvgAchievement class="w-6 h-6" />
+              <div>Osiągnięcia</div>
+            </AsideLink>
           </div>
         </div>
         <div class="p-1 flex justify-center bg-white">
