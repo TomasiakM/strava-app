@@ -25,11 +25,10 @@ export default defineStore("activities", {
       this.isLoading = true;
       this.isError = false;
 
-      const activitiesStore = useActivitiesService();
+      const activitiesService = useActivitiesService();
 
       try {
-        const activities = await activitiesStore.getAll();
-        this.activities = activities;
+        this.activities = await activitiesService.getAll();
 
         updateStatistics();
       } catch (err) {
