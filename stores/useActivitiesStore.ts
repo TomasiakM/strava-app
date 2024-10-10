@@ -19,7 +19,7 @@ export default defineStore("activities", {
 
         updateStatistics();
 
-        return true;
+        return;
       }
 
       this.isLoading = true;

@@ -15,7 +15,7 @@ export default defineStore("tiles", {
         this.activitiesTiles = useActivitiesTilesDemoData();
         this.isLoading = false;
 
-        return true;
+        return;
       }
 
       this.isLoading = true;
