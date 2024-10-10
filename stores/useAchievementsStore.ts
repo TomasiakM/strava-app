@@ -1,6 +1,7 @@
 import type { IAchievement } from "@/types/services/achievements";
 import { defineStore } from "pinia";
 import useAchievementsService from "@/requests/achievements";
+import useAchievementsDemoData from "@/composables/utils/demo/useAchievementsDemoData";
 
 export default defineStore("achievements", {
   state: () => ({
@@ -13,8 +14,10 @@ export default defineStore("achievements", {
       const { isDemoMode } = useDemoStore();
 
       if (isDemoMode) {
-        this.achievements = [];
+        this.achievements = useAchievementsDemoData();
         this.isLoading = false;
+
+        return;
       }
 
       this.isLoading = true;
