@@ -29,6 +29,10 @@ const { isLoading: isActivityStoreLoading, isError: isActivityStoreError } =
   storeToRefs(useActivitiesStore());
 const { isLoading: isTilesStoreLoading, isError: isTilesStoreError } =
   storeToRefs(useTilesStore());
+const {
+  isLoading: isAchievementsStoreLoading,
+  isError: isAchievementStoreError,
+} = storeToRefs(useAchievementsStore());
 
 const refreshStores = () => {
   if (!isActivityStoreLoading && isActivityStoreError) {
@@ -41,6 +45,12 @@ const refreshStores = () => {
     const tilesStore = useTilesStore();
 
     tilesStore.fetchAllActivitiesTiles();
+  }
+
+  if (!isAchievementsStoreLoading && isAchievementStoreError) {
+    const achievementStore = useAchievementsStore();
+
+    achievementStore.fetchAllAchievements();
   }
 };
 </script>
