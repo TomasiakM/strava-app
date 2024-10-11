@@ -5,7 +5,7 @@
       class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 xl:grid-cols-8 gap-2"
     >
       <div
-        v-for="achievement in achievements"
+        v-for="achievement in sortedAchievemetns"
         :key="achievement.achievementType"
       >
         <div
@@ -36,4 +36,21 @@
 
 <script lang="ts" setup>
 const { achievements } = storeToRefs(useAchievementsStore());
+
+const sortedAchievemetns = computed(() => {
+  return achievements.value.sort((a, b) => {
+    if (
+      (a.currentLevel === a.thresholds.length &&
+        b.currentLevel === b.thresholds.length) ||
+      (a.currentLevel === 0 && b.currentLevel === 0)
+    ) {
+      return b.thresholds.length - a.thresholds.length;
+    }
+
+    return (
+      b.currentLevel / b.thresholds.length -
+      a.currentLevel / a.thresholds.length
+    );
+  });
+});
 </script>
