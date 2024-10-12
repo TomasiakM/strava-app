@@ -11,6 +11,7 @@
         <AchievementLevelBadge
           :level="idx + 1"
           :max-level="achievement.thresholds.length"
+          :is-complited="idx < achievement.currentLevel"
         />
         <div class="relative overflow-hidden p-1 font-semibold">
           <AchievementComplitedBadge v-if="achievement.currentLevel > idx" />

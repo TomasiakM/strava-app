@@ -17,6 +17,9 @@
           <AchievementLevelBadge
             :level="achievement.currentLevel"
             :max-level="achievement.thresholds.length"
+            :is-complited="
+              achievement.currentLevel === achievement.thresholds.length
+            "
           />
           <div class="p-2 pt-4 overflow-hidden relative">
             <AchievementComplitedBadge
