@@ -11,7 +11,7 @@
         class="cursor-pointer"
       >
         <div
-          class="rounded shadow text-center relative"
+          class="rounded shadow relative"
           :class="achievement.currentLevel !== 0 ? 'bg-white' : 'bg-black/5'"
         >
           <AchievementLevelBadge
