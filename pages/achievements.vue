@@ -7,6 +7,8 @@
       <div
         v-for="achievement in sortedAchievemetns"
         :key="achievement.achievementType"
+        @click="selectedAchievement = achievement"
+        class="cursor-pointer"
       >
         <div
           class="rounded shadow text-center relative"
@@ -31,11 +33,21 @@
         </div>
       </div>
     </div>
+
+    <Modal v-if="selectedAchievement" @close="selectedAchievement = null">
+      <template #header>{{ selectedAchievement.achievementType }} </template>
+
+      <AchievementModalBody :achievement="selectedAchievement" />
+    </Modal>
   </div>
 </template>
 
 <script lang="ts" setup>
+import type { IAchievement } from "@/types/services/achievements";
+
 const { achievements } = storeToRefs(useAchievementsStore());
+
+const selectedAchievement = ref(null as IAchievement | null);
 
 const sortedAchievemetns = computed(() => {
   return achievements.value.sort((a, b) => {
