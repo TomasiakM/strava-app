@@ -51,6 +51,14 @@ Statistics are calculated based on all activities. User can find there: active d
 
 ![Statistics page](docs/images/statistics.png)
 
+### Achievements page
+
+This page contains list of achievements. After selecting one by clicking on it, modal will be shown with more detailed informations about achievement.
+
+![Achievements page](docs/images/achievements.png)
+
+![Selected achievement](docs/images/selected-achievement.png)
+
 ## Setup
 
 To use app in demo mode without backend api, there is no need to create .env file. Othervice create it with following variables:
