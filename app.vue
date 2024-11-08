@@ -7,24 +7,26 @@ const userStore = useUserStore();
 const activitiesStore = useActivitiesStore();
 const tilesStore = useTilesStore();
 const achievementStore = useAchievementsStore();
+const settingsStore = useSettingsStore();
 
-const fetchAllNecessaryData = () => {
+const initStores = () => {
   if (userStore.isAuthenticated) {
     activitiesStore.fetchAllActivities();
     tilesStore.fetchAllActivitiesTiles();
     achievementStore.fetchAllAchievements();
+    settingsStore.init();
   }
 };
 
 onMounted(() => {
-  nextTick(() => fetchAllNecessaryData());
+  nextTick(() => initStores());
 });
 
 watch(
   () => userStore.isAuthenticated,
   () => {
     if (userStore.isAuthenticated) {
-      fetchAllNecessaryData();
+      initStores();
     }
   }
 );
