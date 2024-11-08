@@ -15,6 +15,9 @@
         layer-type="base"
         name="OpenStreetMap"
       />
+
+      <LeafletMapSettings />
+
       <LeafletPolyline
         v-for="activity in activities"
         :key="activity.stravaId"
