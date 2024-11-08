@@ -18,23 +18,32 @@
 
       <LeafletMapSettings />
 
-      <LeafletPolyline
-        v-for="activity in activities"
-        :key="activity.stravaId"
-        :activity="activity"
-        @selected-polyline="bounds => (map.leafletObject as L.Map).fitBounds(bounds)"
-      />
+      <div v-if="mapSettings.showActivities">
+        <LeafletPolyline
+          v-for="activity in activities"
+          :key="activity.stravaId"
+          :activity="activity"
+          @selected-polyline="bounds => (map.leafletObject as L.Map).fitBounds(bounds)"
+        />
+      </div>
 
-      <LeafletUnlockedTile
-        v-for="tile in getMainTiles.tilesWithoutClusters"
-        :tile="tile"
-      />
+      <div v-if="mapSettings.showTiles">
+        <LeafletUnlockedTile
+          v-for="tile in getMainTiles.tilesWithoutClusters"
+          :tile="tile"
+        />
 
-      <LeafletClusterTile v-for="tile in getMainTiles.clusters" :tile="tile" />
+        <LeafletClusterTile
+          v-for="tile in getMainTiles.clusters"
+          :tile="tile"
+        />
 
-      <LeafletSquareBox :lat-lngs="getMainTiles.squareBox" />
+        <LeafletSquareBox :lat-lngs="getMainTiles.squareBox" />
+      </div>
 
-      <LeafletPolylineGridLine v-for="line in tilesGrid" :lat-lngs="line" />
+      <div v-if="mapSettings.showGrid">
+        <LeafletPolylineGridLine v-for="line in tilesGrid" :lat-lngs="line" />
+      </div>
     </LMap>
   </div>
 </template>
@@ -42,6 +51,7 @@
 <script lang="ts" setup>
 const { activities } = storeToRefs(useActivitiesStore());
 const { getMainTiles } = storeToRefs(useTilesStore());
+const { map: mapSettings } = storeToRefs(useSettingsStore());
 
 const map = ref<any>();
 
